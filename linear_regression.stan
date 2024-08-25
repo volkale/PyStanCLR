@@ -1,11 +1,12 @@
 functions {
   real compressed_normal_lpdf_(real y_sum_, real y_squared_sum_, int weight, real mu, real sigma) {
-    return -0.5 * log(2 * pi() * square(sigma)) * weight - 0.5 * ( (y_squared_sum_ + weight * square(mu) - 2 * y_sum_ * mu) / square(sigma) );
+    real sigma_sq = square(sigma);
+    return - 0.5 * log(2 * pi() * sigma_sq) * weight - 0.5 * ( (y_squared_sum_ + weight * square(mu) - 2 * y_sum_ * mu) / sigma_sq );
   }
 }
 
 data {
-  int<lower=0> N;             // number of unique observations
+  int<lower=0> N;             // number of data rows
   int<lower=0> K;             // number of predictors (including intercept)
   matrix[N, K] X;             // predictor matrix (with a column of ones for intercept)
   vector[N] y_sum;            // outcome variable but summed for constant X
